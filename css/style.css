@@ -122,8 +122,8 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     min-height: 100dvh;
-    overflow: hidden;
-    overscroll-behavior: none;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* ============================================
@@ -620,23 +620,7 @@ body {
     position: relative;
 }
 
-.fill::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
-    animation: shimmer 2.5s infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        transform: translateX(-150%);
-    }
-
-    100% {
-        transform: translateX(150%);
-    }
-}
+/* Shimmer removed for better scroll performance */
 
 .fill.love {
     background: linear-gradient(90deg, var(--love), #fb7185);
@@ -748,34 +732,19 @@ h3 {
     color: var(--text-secondary);
 }
 
-/* Cards - Glassmorphism */
+/* Cards - Simplified for better scroll */
 .card {
-    background: rgba(18, 20, 26, 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: var(--bg-card);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
     margin-bottom: var(--space-md);
     border: 1px solid var(--border-subtle);
-    transition: all var(--transition-fast);
+    transition: border-color 0.2s ease;
     position: relative;
-    overflow: hidden;
 }
 
 .card:hover {
     border-color: var(--border-light);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
 
 /* Daily Quest Card */
@@ -841,7 +810,6 @@ h3 {
 .btn-action:hover {
     background: var(--bg-card-hover);
     border-color: var(--border-light);
-    transform: translateX(6px);
 }
 
 .btn-action:hover::before {
@@ -849,7 +817,7 @@ h3 {
 }
 
 .btn-action:active {
-    transform: scale(0.98);
+    opacity: 0.9;
 }
 
 .btn-action .xp {
@@ -966,12 +934,11 @@ label:first-child {
 }
 
 .btn-add:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 30px var(--glow-primary);
+    opacity: 0.9;
 }
 
 .btn-add:active {
-    transform: scale(0.95);
+    opacity: 0.8;
 }
 
 /* ============================================
@@ -996,7 +963,6 @@ li {
 
 li:hover {
     background: var(--bg-card-hover);
-    transform: translateX(4px);
 }
 
 li.priority {
