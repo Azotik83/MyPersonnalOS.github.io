@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ArchitectOS">
+    <meta name="theme-color" content="#58a6ff">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- SEO -->
+    <title>🎮 Architect-Player OS</title>
+    <meta name="description" content="Application gamifiée de développement personnel - Deviens le Monarque de ta vie">
+
+    <!-- Manifest & Icons -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-72.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- WELCOME OVERLAY (First Launch Only) -->
+    <div id="welcome-overlay" class="welcome-overlay">
+        <div class="welcome-content">
+            <div class="welcome-slides" id="welcome-slides">
+                <!-- Slide 1 -->
+                <div class="welcome-slide active" data-slide="0">
+                    <div class="welcome-icon">⚔️</div>
+                    <h1>Bienvenue, Chasseur</h1>
+                    <p>Tu entres dans l'arène. Ici, chaque action compte et te rapproche de ton potentiel maximum.</p>
+                </div>
+                <!-- Slide 2 -->
+                <div class="welcome-slide" data-slide="1">
+                    <div class="welcome-icon">🎮</div>
+                    <h1>Gamifie ta Vie</h1>
+                    <p>Gagne de l'XP en accomplissant des quêtes alignées avec tes valeurs : Amour, Créativité,
+                        Curiosité.</p>
+                </div>
+                <!-- Slide 3 -->
+                <div class="welcome-slide" data-slide="2">
+                    <div class="welcome-icon">📈</div>
+                    <h1>Monte en Rang</h1>
+                    <p>Passe de Rang-E à Rang-SSS. Débloque des badges. Bâtis ta légende.</p>
+                </div>
+                <!-- Slide 4 -->
+                <div class="welcome-slide" data-slide="3">
+                    <div class="welcome-icon">🛡️</div>
+                    <h1>Collecte tes Preuves</h1>
+                    <p>Chaque victoire est une preuve. Ton bouclier contre le syndrome de l'imposteur.</p>
+                </div>
+            </div>
+            <div class="welcome-dots">
+                <span class="dot active" data-dot="0"></span>
+                <span class="dot" data-dot="1"></span>
+                <span class="dot" data-dot="2"></span>
+                <span class="dot" data-dot="3"></span>
+            </div>
+            <div class="welcome-buttons">
+                <button class="btn-skip" onclick="skipWelcome()">Passer</button>
+                <button class="btn-next" id="btn-welcome-next" onclick="nextWelcomeSlide()">Suivant</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFETTI CONTAINER -->
+    <div id="confetti-container"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="app-container">
+        <!-- SIDEBAR (Desktop) -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="logo">🎮</span>
+                <span class="logo-text">ARCHITECT OS</span>
+            </div>
+            <div class="sidebar-nav">
+                <button class="sidebar-btn active" data-page="quests" onclick="router('quests')">
+                    <span class="nav-icon">⚔️</span>
+                    <span class="nav-label">Quêtes</span>
+                </button>
+                <button class="sidebar-btn" data-page="cap" onclick="router('cap')">
+                    <span class="nav-icon">⚡</span>
+                    <span class="nav-label">C.A.P</span>
+                </button>
+                <button class="sidebar-btn" data-page="vault" onclick="router('vault')">
+                    <span class="nav-icon">🛡️</span>
+                    <span class="nav-label">Preuves</span>
+                </button>
+                <button class="sidebar-btn" data-page="profile" onclick="router('profile')">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-label">Profil</span>
+                </button>
+                <button class="sidebar-btn" data-page="reflect" onclick="router('reflect')">
+                    <span class="nav-icon">🧘</span>
+                    <span class="nav-label">Réflexion</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- MAIN AREA -->
+        <div class="main-area">
+            <!-- HUD HEADER -->
+            <header class="hud">
+                <div class="player-info">
+                    <div class="rank-streak">
+                        <h1 id="player-rank">RANG-E</h1>
+                        <div class="streak-badge" id="streak-badge">
+                            <span class="flame">🔥</span>
+                            <span id="streak-count">0</span>
+                        </div>
+                    </div>
+                    <div class="level-circle" id="level-circle">
+                        <span id="player-lvl">1</span>
+                        <small>LVL</small>
+                        <svg class="level-ring" viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" />
+                            <path class="ring-fill" id="xp-ring"
+                                d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <span>❤️ AMOUR</span>
+                        <div class="progress-bar">
+                            <div class="fill love" id="bar-love"></div>
+                        </div>
+                        <span class="stat-value" id="val-love">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>🎨 CRÉA</span>
+                        <div class="progress-bar">
+                            <div class="fill creativity" id="bar-creativity"></div>
+                        </div>
+                        <span class="stat-value" id="val-creativity">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>🔍 CURIO</span>
+                        <div class="progress-bar">
+                            <div class="fill curiosity" id="bar-curiosity"></div>
+                        </div>
+                        <span class="stat-value" id="val-curiosity">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT -->
+            <main id="main-content"></main>
+
+            <!-- NAVIGATION DOCK (Mobile) -->
+            <nav class="dock" id="dock">
+                <button class="nav-btn active" data-page="quests" onclick="router('quests')">
+                    <span class="nav-icon">⚔️</span>
+                    <span>Quêtes</span>
+                </button>
+                <button class="nav-btn" data-page="cap" onclick="router('cap')">
+                    <span class="nav-icon">⚡</span>
+                    <span>C.A.P</span>
+                </button>
+                <button class="nav-btn" data-page="vault" onclick="router('vault')">
+                    <span class="nav-icon">🛡️</span>
+                    <span>Preuves</span>
+                </button>
+                <button class="nav-btn" data-page="profile" onclick="router('profile')">
+                    <span class="nav-icon">🏆</span>
+                    <span>Profil</span>
+                </button>
+                <button class="nav-btn" data-page="reflect" onclick="router('reflect')">
+                    <span class="nav-icon">🧘</span>
+                    <span>Réflexion</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">+XP</div>
+
+    <!-- ACHIEVEMENT POPUP -->
+    <div id="achievement-popup" class="achievement-popup">
+        <div class="achievement-content">
+            <span class="achievement-icon">🏆</span>
+            <div class="achievement-text">
+                <strong id="achievement-title">Achievement!</strong>
+                <p id="achievement-desc">Description</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEVEL UP OVERLAY -->
+    <div id="levelup-overlay" class="levelup-overlay">
+        <div class="levelup-content">
+            <div class="levelup-icon">⭐</div>
+            <h2>NIVEAU SUPÉRIEUR!</h2>
+            <p id="levelup-text">Tu es maintenant niveau 2</p>
+            <button class="btn-continue" onclick="closeLevelUp()">CONTINUER</button>
+        </div>
+    </div>
+
+    <!-- EDIT PROOF MODAL -->
+    <div id="edit-proof-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Modifier la Preuve</h3>
+                <button class="modal-close" onclick="closeEditProofModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <label>Nom de la victoire</label>
+                <input type="text" id="edit-proof-text" placeholder="Ta victoire...">
+                <label>Date</label>
+                <input type="date" id="edit-proof-date">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeEditProofModal()">Annuler</button>
+                <button class="btn-save" onclick="saveEditedProof()">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Script -->
+    <script src="js/app.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
