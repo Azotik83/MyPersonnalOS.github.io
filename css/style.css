@@ -212,6 +212,32 @@ body {
     pointer-events: auto;
 }
 
+/* MOBILE FIX: Use relative positioning to prevent overlap */
+@media (max-width: 479px) {
+    .welcome-slides {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .welcome-slide {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        opacity: 0;
+        transform: none;
+        display: none;
+        pointer-events: none;
+    }
+
+    .welcome-slide.active {
+        opacity: 1;
+        display: flex;
+        pointer-events: auto;
+    }
+}
+
 .welcome-icon {
     font-size: 4rem;
     margin-bottom: var(--space-md);
